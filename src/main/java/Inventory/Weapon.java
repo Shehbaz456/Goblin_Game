@@ -1,4 +1,4 @@
-package PowerFactory;
+package Inventory;
 
 public class Weapon {
 }
