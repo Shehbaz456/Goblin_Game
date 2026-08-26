@@ -1,5 +1,5 @@
-import Combat.*;
-import Enemy.*;
+import Combat.Combat;
+import GameHelper.InputHelper;
 import Player.Player;
 
 import java.util.Scanner;
@@ -7,7 +7,6 @@ import java.util.Scanner;
 public class Game {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int choice;
         // ==============================
         //        GAME TITLE
         // ==============================
@@ -30,67 +29,93 @@ public class Game {
         System.out.println();
         System.out.println("Welcome, " + playerName + "!");
 
+        // Create Combat once
+        Combat combat = new Combat();
         // ==============================
-        //        PLAYER STATS
+        //        MAIN GAME LOOP
         // ==============================
 
-        System.out.println();
-        System.out.println("----------- YOUR STATS -----------");
+        boolean gameRunning = true;
+        while (gameRunning && player.isAlive()) {
+            System.out.println();
+            System.out.println("----------- YOUR STATS -----------");
+            System.out.println("❤️  HP         : " + player.health);
+            System.out.println("⚔️  Attack     : " + player.attack);
+            System.out.println("🛡️  Defense    : " + player.defense);
+            System.out.println("🧪 MagicPotion : " + player.MagicPotion);
+            System.out.println("⭐ Level       : " + player.level);
+            System.out.println("💰 Gold        : " + player.gold);
 
-        System.out.println("❤️  HP      : " + player.health);
-        System.out.println("⚔️  Attack  : " + player.attack);
-        System.out.println("🛡️  Defense : " + player.defense);
-        System.out.println("⭐ Level    : " + player.level);
-        System.out.println("💰 Gold     : " + player.gold);
+            System.out.println("----------------------------------");
 
-        System.out.println("----------------------------------");
+            System.out.println();
+            System.out.println("What do you want to do?");
 
-        System.out.println("What do you want to do?");
+            System.out.println(
+                    "1. Explore Dungeon\n" +
+                            "2. Check Character\n" +
+                            "3. Inventory\n" +
+                            "4. Rest\n" +
+                            "5. Exit"
+            );
 
-        System.out.println(" ");
-        System.out.println("1. Explore Dungeon\n" +
-                "2. Check Character\n" +
-                "3. Inventory\n" +
-                "4. Rest\n" +
-                "5. Exit");
+            int choice = InputHelper.getValidChoice(scanner, 1, 5);
 
-        while (true) {
-            System.out.print("Choose an option: ");
-            if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-                if (choice >= 1 && choice <= 5)  break;
-                System.out.println("Please choose between 1 and 5.");
-            } else {
-                System.out.println("Please enter a number.");
-                scanner.next(); // remove invalid input
+            // ==============================
+            //        MAIN MENU
+            // ==============================
+            switch (choice) {
+
+                case 1:
+                    System.out.println();
+                    System.out.println("⚔️ Exploring Dungeon...");
+                    boolean dungeonCompleted = combat.start(player, scanner);
+                    if (dungeonCompleted) {
+                        gameRunning = false;
+                    }
+                    break;
+                case 2:
+                    System.out.println();
+                    System.out.println("----------- CHARACTER -----------");
+                    System.out.println("Name    : " + player.name);
+                    System.out.println("HP      : " + player.health);
+                    System.out.println("Attack  : " + player.attack);
+                    System.out.println("Defense : " + player.defense);
+                    System.out.println("Level   : " + player.level);
+                    System.out.println("Gold    : " + player.gold);
+
+                    System.out.println("---------------------------------");
+
+                    break;
+
+                case 3:
+                    System.out.println();
+                    System.out.println("🎒 Inventory");
+                    System.out.println("Inventory system coming soon...");
+                    break;
+                case 4:
+                    System.out.println();
+                    System.out.println("💤 You rest...");
+                    player.heal();
+                   //  player.health += 10;
+                    // Prevent HP from exceeding maximum.
+                    if (player.health > player.maxHealth) {
+                        player.health = player.maxHealth;
+                    }
+                    System.out.println( "Your HP is now: " + player.health);
+                    break;
+                case 5:
+                    System.out.println();
+                    System.out.println("Thanks for playing!");
+                    gameRunning = false;
+                    break;
             }
         }
-
-        switch (choice){
-            case 1:
-                System.out.println("1. Explore Dungeon");
-                Combat combat = new Combat();
-                combat.start(player);
-                break;
-            case 2:
-                System.out.println("2. Check Character");
-                break;
-            case 3:
-                System.out.println("3 Inventory");
-                break;
-            case 4:
-                System.out.println("4. Rest");
-                break;
-            case 5:
-                System.out.println("Gave exit.");
-                break;
-            default:
-                System.out.println("Invalid choice. Choose 1-5.");
+        if (!player.isAlive()) {
+            System.out.println();
+            System.out.println("💀 YOU DIED!");
+            System.out.println("Game Over.");
         }
-
         scanner.close();
-
     }
-
-
 }

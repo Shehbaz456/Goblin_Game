@@ -1,92 +1,109 @@
 package Combat;
 
 import Enemy.*;
+import GameHelper.*;
 import Player.Player;
 
 import java.util.Scanner;
 
-
-
-
 public class Combat {
 
-    public void start(Player player) {
-        System.out.println(" ");
-        System.out.println("Combat started!");
+    public boolean start(Player player,Scanner scanner) {
+        System.out.println();
+        System.out.println("========== LEVEL -  "+player.level + " ========================");
+        System.out.println();
+        System.out.println("==================================");
+        System.out.println("⚔️ COMBAT STARTED!");
+        System.out.println("==================================");
 
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-        System.out.println(" ");
-        System.out.println("----------------------------------");
-        System.out.println(" ");
+        if(player.level==1 || player.level==2 ){
+        System.out.println();
         System.out.println("You enter a dark room...");
-        System.out.println(" ");
+        System.out.println();
         System.out.println("Something is moving in the shadows.");
-        System.out.println(" ");
+        System.out.println();
+        }else if(player.level==3){
+            System.out.println();
+            System.out.println("You enter a Magic Mistery room...");
+            System.out.println();
+            System.out.println("Something is moving in the shadows.");
+            System.out.println();
+        }else {
 
-        // getIntoRoom();
-        Enemy goblin = new Goblin();
+        }
 
-        System.out.println("\uD83D\uDC79 GOBLIN APPEARED!");
-        System.out.println( goblin.getName() + " HP: " + goblin.getHp());
-        System.out.println(" ");
+        WinnerRewards rewards = new WinnerRewards();
+        DungeonCompleted dungeonCompleted = new DungeonCompleted();
+        // New enemy for this combat
+        Enemy enemy;
+        if (player.level == 1 || player.level == 2) {
+            enemy = new Goblin();
+        } else if (player.level == 3) {
+            enemy = new Skeleton();
+        } else if (player.level == 4) {
+            enemy = new Skeleton();
+        } else {
+            enemy = new Dragon();
+        }
 
-        System.out.println("1. Attack\n" +
-                "2. Use Potion\n" +
-                "3. Run");
+        System.out.println(  " 👹 "+ enemy.getName().toUpperCase() + " APPEARED!");
+        int roundCount = 1;
+        boolean running = true;
+        // =================================
+        //          COMBAT LOOP
+        // =================================
+        while (enemy.isAlive() && player.isAlive() && running ){
+            System.out.println();
+            System.out.println("========== ROUND " + roundCount + " ==========");
+            System.out.println();
+            System.out.println("Player HP : " + player.health);
+            System.out.println( enemy.getName() + " HP : " + enemy.getHp());
 
+            System.out.println();
+            System.out.println("1. Attack");
+            System.out.println("2. Use Potion");
+            System.out.println("3. Run");
 
-
-        while (true) {
-
-            System.out.print("Choose an option: ");
-
-            if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-
-                if (choice >= 1 && choice <= 3) {
+           int choice = InputHelper.getValidChoice(scanner, 1, 3);
+            switch (choice){
+                case 1:
+                    System.out.println();
+                    System.out.println("⚔️ You attack the "+ enemy.getName() + "!" );
+                    enemy.takeDamage(player.attack);
+                    // Goblin attacks back only if still alive
+                    if (enemy.isAlive()) {
+                        System.out.println("👹 "+ enemy.getName() + " attacks you!");
+                        player.takeDamage(enemy.attack);
+                        player.health +=player.defense;
+                        System.out.println( "💔"+ " You received " + enemy.attack + " damage!" );
+                    }
+                    if(player.health<enemy.attack){
+                        player.health=0;
+                    }
+                    roundCount++;
                     break;
-                }
-
-                System.out.println("Please choose between 1 and 3.");
-
-            } else {
-                System.out.println("Please enter a number.");
-                scanner.next(); // remove invalid input
+                case 2:
+                    player.useMagicPotion();
+                    break;
+                case 3:
+                    System.out.println("3 : run");
+                    running=false;
+                    break;
             }
         }
+        if(!enemy.isAlive()){
+            rewards.getPlayerRewards(enemy,player);
 
-        switch (choice){
-            case 1:
-
-                int roundcount = 1;
-                if(goblin.isAlive() || player.isAlive() ){
-                System.out.println(" ");
-                System.out.println(" Round :" + roundcount);
-                System.out.println(" goblin.attack " + goblin.attack);
-                System.out.println(" player.attack " + player.attack);
-                goblin.takeDamage(player.attack);
-                player.takeDamage(goblin.attack);
-                System.out.println(" ");
-                System.out.println("=========== Health status ============");
-                System.out.println("Goblin HP : " + goblin.getHp());
-                System.out.println("player HP : " +player.health);
-                roundcount++;
-                }
-
-                System.out.println(" ");
-                System.out.println(" Round 2 ");
-
-
-                break;
-            case 2:
-                System.out.println("2 : Use Potion");
-                break;
-            case 3:
-                System.out.println("3 : run");
-                break;
+            if (enemy instanceof Dragon) {
+                dungeonCompleted.show(player);
+                return true;
+            }
         }
-
+        if (!player.isAlive()) {
+            System.out.println();
+            System.out.println("💀 You have been defeated!");
+        }
+    return false;
     }
 }
 

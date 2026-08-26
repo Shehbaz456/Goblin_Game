@@ -12,14 +12,11 @@ public abstract class Enemy{
         this.attack=attack;
     }
 
-
-
     public void takeDamage(int damage){
         hp -=damage;
         if(hp<0){
             hp=0;
         }
-        System.out.println(name + " takes " + damage + " damage.");
     }
     public boolean isAlive() {
         return hp > 0;
