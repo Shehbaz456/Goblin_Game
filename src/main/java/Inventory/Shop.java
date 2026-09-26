@@ -1,4 +1,4 @@
 package Inventory;
 
-public class Weapon {
+public class Shop {
 }
