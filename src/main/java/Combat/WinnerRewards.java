@@ -6,7 +6,6 @@ import Player.Player;
 public class WinnerRewards {
 
     public void getPlayerRewards(Enemy enemy, Player player) {
-
         System.out.println();
         System.out.println("╔══════════════════════════════════════════╗");
         System.out.println("║                                          ║");
@@ -15,13 +14,11 @@ public class WinnerRewards {
         System.out.println("║          " + enemy.getName().toUpperCase() + " DEFEATED!              ║");
         System.out.println("║                                          ║");
         System.out.println("╚══════════════════════════════════════════╝");
-
         int gold = 0;
         int xp = 0;
         int potionReward = 0;
 
         switch (enemy.getName().toUpperCase()) {
-
             case "GOBLIN":
                 gold = 25;
                 xp = 20;
@@ -43,44 +40,34 @@ public class WinnerRewards {
             default:
                 System.out.println("Unknown enemy reward.");
         }
-
-        // Give rewards
-        player.gold += gold;
-        player.goldCollected += gold;
-
-        player.experience += xp;
-        player.MagicPotion += potionReward;
-        
-        player.enemiesDefeated++;
-
+        player.addGold(gold);
+        player.addGoldCollected(gold);
+        player.addExperience(xp);
+        player.addMagicPotion(potionReward);
+        player.addEnemiesDefeated(1);
         // Display rewards
         System.out.println();
         System.out.println("              🎁 REWARDS");
         System.out.println("──────────────────────────────────────────");
         System.out.println("💰 Gold       : +" + gold);
         System.out.println("⭐ XP         : +" + xp);
-        System.out.println("🧪 Potions    : +" + player.MagicPotion);
+        System.out.println("🧪 Potions    : +" + potionReward);
         System.out.println("──────────────────────────────────────────");
-
         System.out.println();
         System.out.println("              📈 LEVEL UP!");
         System.out.println("──────────────────────────────────────────");
-
-        player.level++;
-        player.health += 20;
-        if (player.health > player.maxHealth) {
-            player.health = player.maxHealth;
+        player.increaseLevel(1);
+        player.addHealth(20);
+        if (player.getHealth() > player.getMaxHealth()) {
+            player.setHealth(player.getMaxHealth());
         }
-        player.attack += 5;
-        player.defense += 2;
-
-        System.out.println("⭐ Level      : " + player.level);
+        player.increaseAttack(5);
+        player.increaseDefence(2);
+        System.out.println("⭐ Level      : " + player.getLevel());
         System.out.println("❤️ HP         : +20");
         System.out.println("⚔️ Attack     : +5");
         System.out.println("🛡️ Defense    : +2");
-
         System.out.println("──────────────────────────────────────────");
-
         System.out.println();
         System.out.println("✨ Your character has become stronger!");
         System.out.println();

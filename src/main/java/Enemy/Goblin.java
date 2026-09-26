@@ -2,6 +2,6 @@ package Enemy;
 
 public class Goblin extends Enemy {
     public Goblin(){
-        super("Goblin",40,10);
+        super("Goblin",100,15);
     }
 }

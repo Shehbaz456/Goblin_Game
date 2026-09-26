@@ -1,124 +1,131 @@
 package Combat;
 
 import Enemy.*;
-import GameHelper.*;
+import GameHelper.GameException.*;
+import GameHelper.InputHelper;
 import Player.Player;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Combat {
-
-    public boolean start(Player player,Scanner scanner) {
+    public boolean start(Player player, Scanner scanner) {
         System.out.println();
-        System.out.println("========== LEVEL -  "+player.level + " ========================");
+        System.out.println("========== LEVEL -  " + player.getLevel() + " ========================");
         System.out.println();
         System.out.println("==================================");
         System.out.println("⚔️ COMBAT STARTED!");
         System.out.println("==================================");
 
-        if(player.level==1 || player.level==2 ){
-        System.out.println();
-        System.out.println("You enter a dark room...");
-        System.out.println();
-        System.out.println("Something is moving in the shadows.");
-        System.out.println();
-        }else if(player.level==3){
+        if (player.getLevel() == 1 || player.getLevel() == 2) {
+            System.out.println();
+            System.out.println("You enter a dark room...");
+            System.out.println();
+            System.out.println("Something is moving in the shadows.");
+            System.out.println();
+        } else if (player.getLevel() == 3) {
             System.out.println();
             System.out.println("You enter a Magic Mistery room...");
             System.out.println();
             System.out.println("Something is moving in the shadows.");
             System.out.println();
-        }else {
-
         }
 
+        MysteryBox mysteryBox = new MysteryBox();
         WinnerRewards rewards = new WinnerRewards();
         DungeonCompleted dungeonCompleted = new DungeonCompleted();
         // New enemy for this combat
         Enemy enemy;
-        if (player.level == 1 || player.level == 2) {
+        if (player.getLevel() == 1 || player.getLevel() == 2) {
             enemy = new Goblin();
-        } else if (player.level == 3) {
-            enemy = new Skeleton();
-        } else if (player.level == 4) {
+        } else if (player.getLevel() == 3) {
             enemy = new Skeleton();
         } else {
             enemy = new Dragon();
         }
 
-        System.out.println(  " 👹 "+ enemy.getName().toUpperCase() + " APPEARED!");
+        System.out.println(" 👹 " + enemy.getName().toUpperCase() + " APPEARED!");
         int roundCount = 1;
         boolean running = true;
         // =================================
-        //          COMBAT LOOP
+        // COMBAT LOOP
         // =================================
-        while (enemy.isAlive() && player.isAlive() && running ){
+        while (enemy.isAlive() && player.isAlive() && running) {
             System.out.println();
             System.out.println("========== ROUND " + roundCount + " ==========");
             System.out.println();
-            System.out.println("Player HP : " + player.health);
-            System.out.println( enemy.getName() + " HP : " + enemy.getHp());
-
+            System.out.println("Player HP : " + player.getHealth());
+            System.out.println(enemy.getName() + " HP : " + enemy.getHp());
             System.out.println();
             System.out.println("1. Attack");
             System.out.println("2. Use Potion");
             System.out.println("3. Run");
 
-           int choice = InputHelper.getValidChoice(scanner, 1, 3);
-            switch (choice){
+            // if(player.health<enemy.attack){
+            // System.out.println("Dont choose 1. Attack may casus of DEATH 💀 ");
+            // throw new InsufficientHealthException("Not sufficient health");
+            // }
+            int choice = InputHelper.getValidChoice(scanner, 1, 3);
+            switch (choice) {
                 case 1:
+                    if (player.getHealth() <= enemy.attack) {
+                        System.out.println("⚠️ Too dangerous! You don't have enough HP to survive the attack.");
+                        System.out.print("Do you want to attack? (Y/N): ");
+                        String attackChoice = scanner.next().trim().toUpperCase();
+
+                        if (attackChoice.equals("N")) {
+                            System.out.println("🏃 You decided to back off.");
+                            break;
+                        }
+                    }
                     System.out.println();
-                    System.out.println("⚔️ You attack the "+ enemy.getName() + "!" );
-                    enemy.takeDamage(player.attack);
+                    System.out.println("⚔️ You attack the " + enemy.getName() + "!");
+                    enemy.takeDamage(player.getAttack());
                     // Goblin attacks back only if still alive
                     if (enemy.isAlive()) {
-                        System.out.println("👹 "+ enemy.getName() + " attacks you!");
-                        player.takeDamage(enemy.attack);
-                        player.health +=player.defense;
-                        System.out.println( "💔"+ " You received " + enemy.attack + " damage!" );
-                    }
-                    if(player.health<enemy.attack){
-                        player.health=0;
+                        System.out.println("👹 " + enemy.getName() + " attacks you!");
+                        try {
+                            int actualDamage = Math.max(0, enemy.attack - player.getDefense());
+                            player.takeDamage(actualDamage);
+                            System.out.println("💔" + " You received " + actualDamage + " damage!");
+                        } catch (InvalidDamageException e) {
+                            System.out.println(e.getMessage());
+                        } catch (InsufficientHealthException e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                     roundCount++;
                     break;
                 case 2:
-                    player.useMagicPotion();
+                    try {
+                        player.useMagicPotion();
+                    } catch (InsufficientPotionException e) {
+                        System.out.println("⚠️ " + e.getMessage());
+                    }
                     break;
                 case 3:
                     System.out.println("3 : run");
-                    running=false;
+                    running = false;
                     break;
             }
         }
-        if(!enemy.isAlive()){
-            rewards.getPlayerRewards(enemy,player);
-
+        if (!enemy.isAlive()) {
+            rewards.getPlayerRewards(enemy, player);
             if (enemy instanceof Dragon) {
                 dungeonCompleted.show(player);
                 return true;
             }
+            int eventChance = new Random().nextInt(100);
+
+            if (eventChance < 50) {
+                mysteryBox.open(player, scanner);
+            }
+
         }
         if (!player.isAlive()) {
             System.out.println();
             System.out.println("💀 You have been defeated!");
         }
-    return false;
+        return false;
     }
 }
-
-
-
-//        Enemy goblin = new Goblin();
-//        Enemy skeleton = new Skeleton();
-//        Enemy dragon = new Dragon();
-//
-//        System.out.println(goblin.getName());
-//        System.out.println("HP: " + goblin.getHp());
-//
-//        System.out.println(skeleton.getName());
-//        System.out.println("HP: " + skeleton.getHp());
-//
-//        goblin.takeDamage(30);
-//        System.out.println("HP: " + goblin.getHp());
-//        System.out.println("is Alive: " + goblin.isAlive());

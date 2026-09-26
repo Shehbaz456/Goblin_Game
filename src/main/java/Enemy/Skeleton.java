@@ -1,7 +1,7 @@
 package Enemy;
 
 public class Skeleton extends Enemy {
-    public Skeleton(){
-        super("Skeleton",60,15);
+    public Skeleton() {
+        super("Skeleton", 160, 20);
     }
 }
