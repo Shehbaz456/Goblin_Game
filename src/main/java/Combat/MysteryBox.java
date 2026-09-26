@@ -1,5 +1,6 @@
 package Combat;
 
+import GameHelper.GameException;
 import GameHelper.InputHelper;
 import Player.Player;
 
@@ -59,7 +60,7 @@ public class MysteryBox {
 
     private void giveGold(Player player) {
         int gold = random.nextInt(76) + 25;
-        player.addGold(gold);
+        player.collectGold(gold);
         System.out.println("💰 You found " + gold + " gold!");
         System.out.println("💰 Current Gold: " + player.getGold());
     }
@@ -74,8 +75,7 @@ public class MysteryBox {
     private void healPlayer(Player player) {
         int heal = random.nextInt(51) + 25;
         int oldHealth = player.getHealth();
-       //  player.setHealth(heal);
-        player.addHealth(heal);
+        player.heal(heal);
 
         if (player.getHealth() > player.getMaxHealth()) {
             player.setHealth(player.getMaxHealth());
@@ -96,7 +96,7 @@ public class MysteryBox {
 
     private void trap(Player player) {
         int damage = random.nextInt(21) + 10;
-        player.decreaseHealth(damage);
+        player.takeDamage(damage);
         if (player.getHealth() < 0) {
             player.setHealth(0);
         }

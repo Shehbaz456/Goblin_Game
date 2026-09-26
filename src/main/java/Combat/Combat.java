@@ -10,41 +10,12 @@ import java.util.Scanner;
 
 public class Combat {
     public boolean start(Player player, Scanner scanner) {
-        System.out.println();
-        System.out.println("========== LEVEL -  " + player.getLevel() + " ========================");
-        System.out.println();
-        System.out.println("==================================");
-        System.out.println("⚔️ COMBAT STARTED!");
-        System.out.println("==================================");
-
-        if (player.getLevel() == 1 || player.getLevel() == 2) {
-            System.out.println();
-            System.out.println("You enter a dark room...");
-            System.out.println();
-            System.out.println("Something is moving in the shadows.");
-            System.out.println();
-        } else if (player.getLevel() == 3) {
-            System.out.println();
-            System.out.println("You enter a Magic Mistery room...");
-            System.out.println();
-            System.out.println("Something is moving in the shadows.");
-            System.out.println();
-        }
-
+        // New enemy for this combat
+        Enemy enemy = EnemyAppend.createEnemy(player);
         MysteryBox mysteryBox = new MysteryBox();
         WinnerRewards rewards = new WinnerRewards();
         DungeonCompleted dungeonCompleted = new DungeonCompleted();
-        // New enemy for this combat
-        Enemy enemy;
-        if (player.getLevel() == 1 || player.getLevel() == 2) {
-            enemy = new Goblin();
-        } else if (player.getLevel() == 3) {
-            enemy = new Skeleton();
-        } else {
-            enemy = new Dragon();
-        }
 
-        System.out.println(" 👹 " + enemy.getName().toUpperCase() + " APPEARED!");
         int roundCount = 1;
         boolean running = true;
         // =================================
@@ -61,15 +32,12 @@ public class Combat {
             System.out.println("2. Use Potion");
             System.out.println("3. Run");
 
-            // if(player.health<enemy.attack){
-            // System.out.println("Dont choose 1. Attack may casus of DEATH 💀 ");
-            // throw new InsufficientHealthException("Not sufficient health");
-            // }
             int choice = InputHelper.getValidChoice(scanner, 1, 3);
             switch (choice) {
                 case 1:
-                    if (player.getHealth() <= enemy.attack) {
-                        System.out.println("⚠️ Too dangerous! You don't have enough HP to survive the attack.");
+                    if (player.getHealth() <= enemy.getAttack()) {
+                        System.out.println(
+                                "⚠️ Too dangerous! You don't have enough HP to survive the attack.");
                         System.out.print("Do you want to attack? (Y/N): ");
                         String attackChoice = scanner.next().trim().toUpperCase();
 
@@ -85,12 +53,10 @@ public class Combat {
                     if (enemy.isAlive()) {
                         System.out.println("👹 " + enemy.getName() + " attacks you!");
                         try {
-                            int actualDamage = Math.max(0, enemy.attack - player.getDefense());
+                            int actualDamage = Math.max(0, enemy.getAttack() - player.getDefense());
                             player.takeDamage(actualDamage);
                             System.out.println("💔" + " You received " + actualDamage + " damage!");
                         } catch (InvalidDamageException e) {
-                            System.out.println(e.getMessage());
-                        } catch (InsufficientHealthException e) {
                             System.out.println(e.getMessage());
                         }
                     }
@@ -116,11 +82,9 @@ public class Combat {
                 return true;
             }
             int eventChance = new Random().nextInt(100);
-
             if (eventChance < 50) {
                 mysteryBox.open(player, scanner);
             }
-
         }
         if (!player.isAlive()) {
             System.out.println();

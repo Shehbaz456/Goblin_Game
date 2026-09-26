@@ -1,13 +1,7 @@
 package GameHelper;
 
 public class GameException {
-    public static class InsufficientHealthException extends Exception {
-        public InsufficientHealthException(String message) {
-            super(message);
-        }
-    }
-
-    public static class InvalidDamageException extends Exception {
+    public static class InvalidDamageException extends RuntimeException {
         public InvalidDamageException(String message) {
             super(message);
         }
@@ -24,5 +18,4 @@ public class GameException {
             super(message);
         }
     }
-
 }

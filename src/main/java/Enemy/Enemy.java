@@ -4,9 +4,13 @@ public abstract class Enemy {
     // have hp // have atack
     protected String name;
     protected int hp;
-    public int attack;
+    private final int attack;
 
-    public Enemy(String name, int hp, int attack) {
+    public int getAttack() {
+        return attack;
+    }
+
+    protected Enemy(String name, int hp, int attack) {
         this.name = name;
         this.hp = hp;
         this.attack = attack;

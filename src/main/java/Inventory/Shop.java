@@ -9,13 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Shop {
-    public static List<Item> createDefaultInventory() {
-        List<Item> inventory = new ArrayList<>();
-        inventory.add(new Item("Health Potion", 100, 100));
-        inventory.add(new Item("Sword ⚔️", 200, 50));
-        inventory.add(new Item("Shield", 200, 20));
-        return inventory;
-    }
 
     // Public Final String NOT_ ENOUGH_GOLD_TO_BUY;
     public static List<Item> inventoryItems() {
@@ -33,7 +26,6 @@ public class Shop {
     public static void showInventoryList(Scanner sc, Player player) {
         try {
             List<Item> inventoryItemsList = inventoryItems();
-            // inventoryItemsList.clear();
             if (inventoryItemsList.isEmpty()) {
                 throw new GameException.ItemNotFoundException("Shop Item Not found.");
             }
@@ -71,10 +63,10 @@ public class Shop {
                 System.out.println("\nYou selected: " + selectedItem.getName());
 
                 if (player.getGold() >= selectedItem.getGold()) {
-                    player.decreaseGold(selectedItem.getGold());
+                    player.spendGold(selectedItem.getGold());
                     switch (choose) {
                         case 1: // Health Potion
-                            player.addHealth(selectedItem.getPower());
+                            player.heal(selectedItem.getPower());
                             System.out.println(
                                     "✨ Drank potion! Restored " + selectedItem.getPower() + " HP.");
                             break;

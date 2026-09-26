@@ -49,11 +49,11 @@ public class Game {
             System.out.println("What do you want to do?");
 
             System.out.println(
-                    "1. Explore Dungeon\n" +
-                            "2. Check Character\n" +
-                            "3. Inventory\n" +
-                            "4. Rest\n" +
-                            "5. Exit");
+                    "1. Explore Dungeon\n"
+                            + "2. Check Character\n"
+                            + "3. Inventory\n"
+                            + "4. Rest\n"
+                            + "5. Exit");
 
             int choice = InputHelper.getValidChoice(scanner, 1, 5);
 
@@ -61,7 +61,6 @@ public class Game {
             // MAIN MENU
             // ==============================
             switch (choice) {
-
                 case 1:
                     System.out.println();
                     System.out.println("⚔️ Exploring Dungeon...");
@@ -81,7 +80,9 @@ public class Game {
                 case 4:
                     System.out.println();
                     System.out.println("💤 You rest...");
-                    player.heal();
+                    int health = 50;
+                    player.heal(health);
+                    System.out.println("❤️ Healed 50 HP!");
                     System.out.println("Your HP is now: " + player.getHealth());
                     break;
                 case 5:

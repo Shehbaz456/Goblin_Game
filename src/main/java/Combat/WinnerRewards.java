@@ -11,7 +11,8 @@ public class WinnerRewards {
         System.out.println("║                                          ║");
         System.out.println("║              🏆 VICTORY!                 ║");
         System.out.println("║                                          ║");
-        System.out.println("║          " + enemy.getName().toUpperCase() + " DEFEATED!              ║");
+        System.out.println(
+                "║          " + enemy.getName().toUpperCase() + " DEFEATED!              ║");
         System.out.println("║                                          ║");
         System.out.println("╚══════════════════════════════════════════╝");
         int gold = 0;
@@ -40,11 +41,10 @@ public class WinnerRewards {
             default:
                 System.out.println("Unknown enemy reward.");
         }
-        player.addGold(gold);
-        player.addGoldCollected(gold);
-        player.addExperience(xp);
+        player.collectGold(gold);
+        player.gainExperience(xp);
         player.addMagicPotion(potionReward);
-        player.addEnemiesDefeated(1);
+        player.recordEnemyDefeated(1);
         // Display rewards
         System.out.println();
         System.out.println("              🎁 REWARDS");
@@ -57,7 +57,7 @@ public class WinnerRewards {
         System.out.println("              📈 LEVEL UP!");
         System.out.println("──────────────────────────────────────────");
         player.increaseLevel(1);
-        player.addHealth(20);
+        player.heal(20);
         if (player.getHealth() > player.getMaxHealth()) {
             player.setHealth(player.getMaxHealth());
         }
