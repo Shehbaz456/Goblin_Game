@@ -1,4 +1,4 @@
-package Player;
+package Template.Player;
 
 import GameHelper.GameException.*;
 
@@ -83,19 +83,18 @@ public final class Player {
         this.attack += attack;
     }
 
-    public void increaseLevel(int level) {
-        this.level += level;
-    }
-
-    public void increaseDefence(int defense) {
-        this.defense += defense;
-    }
-
     public void gainExperience(int xp) {
         if (xp < 0) {
             throw new IllegalArgumentException("XP cannot be negative.");
         }
         this.experience += xp;
+        if (experience > requiredXptoLevelup()) {
+            levelUp();
+        }
+    }
+
+    public int requiredXptoLevelup() {
+        return getLevel() * 100;
     }
 
     public void collectGold(int gold) {
@@ -137,7 +136,8 @@ public final class Player {
         if (damage < 0) {
             throw new InvalidDamageException("Damage cannot be negative.");
         }
-        this.health = clampHealth(health - damage);
+        int actualDamage = Math.max(0, damage - getDefense());
+        this.health = clampHealth(health - actualDamage);
     }
 
     public void heal(int health) {
@@ -168,6 +168,37 @@ public final class Player {
         enemiesDefeated += enemyDefeatedCount;
     }
 
+    public void increaseDefense(int defense) {
+        if (defense < 0) {
+            System.out.println("Defense can not be Negative.");
+            throw new IllegalArgumentException("Defense can not be Negative.");
+        }
+        if (defense > maxHealth) {
+            System.out.println("Defence - Defense can not exceed maxHealth.");
+        }
+        this.defense += defense;
+    }
+
+    public void levelUp() {
+        level++;
+        increaseAttack(5);
+        increaseDefense(2);
+        increaseDefense(2);
+        heal(20);
+        System.out.println();
+        System.out.println("──────────────────────────────────────────");
+        System.out.println("              📈 LEVEL UP!");
+        System.out.println("──────────────────────────────────────────");
+        System.out.println("⭐ Level      : " + getLevel());
+        System.out.println("❤️ HP         : +20");
+        System.out.println("⚔️ Attack     : +5");
+        System.out.println("🛡️ Defense    : +2");
+        System.out.println("──────────────────────────────────────────");
+        System.out.println();
+        System.out.println("✨ Your character has become stronger!");
+        System.out.println();
+    }
+
     // Add this inside Player.java
     public void printStatsSummary() {
         System.out.println("\n----------- YOUR STATS -----------");
@@ -175,6 +206,7 @@ public final class Player {
         System.out.println("⚔️  Attack     : " + this.attack);
         System.out.println("🛡️  Defense    : " + this.defense);
         System.out.println("🧪 MagicPotion : " + this.magicPotion);
+        System.out.println("⭐ Experience  : " + this.experience);
         System.out.println("⭐ Level       : " + this.level);
         System.out.println("💰 Gold        : " + this.gold);
         System.out.println("----------------------------------");

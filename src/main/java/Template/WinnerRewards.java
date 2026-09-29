@@ -37,7 +37,6 @@ public class WinnerRewards {
                 xp = 200;
                 potionReward = 3;
                 break;
-
             default:
                 System.out.println("Unknown enemy reward.");
         }
@@ -53,23 +52,5 @@ public class WinnerRewards {
         System.out.println("⭐ XP         : +" + xp);
         System.out.println("🧪 Potions    : +" + potionReward);
         System.out.println("──────────────────────────────────────────");
-        System.out.println();
-        System.out.println("              📈 LEVEL UP!");
-        System.out.println("──────────────────────────────────────────");
-        player.increaseLevel(1);
-        player.heal(20);
-        if (player.getHealth() > player.getMaxHealth()) {
-            player.setHealth(player.getMaxHealth());
-        }
-        player.increaseAttack(5);
-        player.increaseDefence(2);
-        System.out.println("⭐ Level      : " + player.getLevel());
-        System.out.println("❤️ HP         : +20");
-        System.out.println("⚔️ Attack     : +5");
-        System.out.println("🛡️ Defense    : +2");
-        System.out.println("──────────────────────────────────────────");
-        System.out.println();
-        System.out.println("✨ Your character has become stronger!");
-        System.out.println();
     }
 }

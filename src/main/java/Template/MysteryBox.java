@@ -77,9 +77,9 @@ public class MysteryBox {
         int oldHealth = player.getHealth();
         player.heal(heal);
 
-        if (player.getHealth() > player.getMaxHealth()) {
-            player.setHealth(player.getMaxHealth());
-        }
+        //        if (player.getHealth() > player.getMaxHealth()) {
+        //            player.setHealth(player.getMaxHealth());
+        //        }
         int actualHeal = player.getHealth() - oldHealth;
         System.out.println("❤️ You found a Healing Crystal!");
         System.out.println("❤️ HP restored: +" + actualHeal);
