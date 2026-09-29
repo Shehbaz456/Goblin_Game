@@ -1,15 +1,14 @@
 package Inventory;
 
-import GameHelper.GameException;
-import GameHelper.InputHelper;
-import Player.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Shop {
+import GameHelper.GameException;
+import GameHelper.InputHelper;
+import Player.Player;
 
+public class Shop {
     // Public Final String NOT_ ENOUGH_GOLD_TO_BUY;
     public static List<Item> inventoryItems() {
         List<Item> inventory = new ArrayList<>();

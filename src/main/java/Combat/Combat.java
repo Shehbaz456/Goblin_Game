@@ -1,16 +1,20 @@
 package Combat;
 
-import Enemy.*;
+import java.util.Random;
+import java.util.Scanner;
+
+import Enemy.Dragon;
+import Enemy.Enemy;
+import Enemy.EnemyFactory;
 import GameHelper.GameException.*;
+import GameHelper.GameException.InsufficientPotionException;
+import GameHelper.GameException.InvalidDamageException;
 import GameHelper.InputHelper;
 import Player.Player;
 import Template.CombatTemplate;
 import Template.DungeonCompleted;
 import Template.MysteryBox;
 import Template.WinnerRewards;
-
-import java.util.Random;
-import java.util.Scanner;
 
 public class Combat {
     public boolean start(Player player, Scanner scanner) {
@@ -19,7 +23,6 @@ public class Combat {
         MysteryBox mysteryBox = new MysteryBox();
         WinnerRewards rewards = new WinnerRewards();
         DungeonCompleted dungeonCompleted = new DungeonCompleted();
-
         int round = 1;
         boolean running = true;
         // =================================
