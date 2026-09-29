@@ -1,15 +1,18 @@
-package Combat;
+package Enemy;
 
-import Enemy.*;
 import Player.Player;
 
 public class EnemyFactory {
     public static Enemy createEnemy(Player player) {
+        Enemy enemy = null;
         if (player.getLevel() <= 2) {
-            return new Goblin();
+            enemy = new Goblin();
         } else if (player.getLevel() == 3) {
-            return new Skeleton();
+            enemy = new Skeleton();
+        } else {
+            enemy = new Dragon();
         }
-        return new Dragon();
+        System.out.println(" 👹 " + enemy.getName().toUpperCase() + " APPEARED!");
+        return enemy;
     }
 }

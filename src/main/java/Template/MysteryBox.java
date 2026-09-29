@@ -1,6 +1,5 @@
-package Combat;
+package Template;
 
-import GameHelper.GameException;
 import GameHelper.InputHelper;
 import Player.Player;
 

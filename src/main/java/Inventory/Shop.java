@@ -13,9 +13,9 @@ public class Shop {
     // Public Final String NOT_ ENOUGH_GOLD_TO_BUY;
     public static List<Item> inventoryItems() {
         List<Item> inventory = new ArrayList<>();
-        inventory.add(new Item("Health Potion", 100, 100));
-        inventory.add(new Item("Sword ⚔️", 200, 50));
-        inventory.add(new Item("Shield", 200, 20));
+        inventory.add(new Item("Health Potion", 90, 100));
+        inventory.add(new Item("Sword ⚔️", 70, 50));
+        inventory.add(new Item("Shield", 40, 20));
         return inventory; // Shop.showInventoryList(List list);
     }
 
@@ -30,8 +30,6 @@ public class Shop {
                 throw new GameException.ItemNotFoundException("Shop Item Not found.");
             }
 
-            System.out.println("first Inventory : " + inventoryItemsList.get(0));
-            System.out.println("You Have gold : " + player.getGold());
             System.out.println();
             boolean itemloop = true;
             while (itemloop) {
@@ -78,7 +76,7 @@ public class Shop {
                                             + ".");
                             break;
                         case 3:
-                            player.increaseDefence(selectedItem.getPower());
+                            player.increaseDefense(selectedItem.getPower());
                             System.out.println(
                                     "🛡️ Equipped Shield! Defense increased by "
                                             + selectedItem.getPower()

@@ -1,4 +1,4 @@
-package Combat;
+package Template;
 
 import Enemy.Enemy;
 import Player.Player;
@@ -12,7 +12,7 @@ public class WinnerRewards {
         System.out.println("║              🏆 VICTORY!                 ║");
         System.out.println("║                                          ║");
         System.out.println(
-                "║          " + enemy.getName().toUpperCase() + " DEFEATED!              ║");
+                "║            " + enemy.getName().toUpperCase() + " DEFEATED!              ║");
         System.out.println("║                                          ║");
         System.out.println("╚══════════════════════════════════════════╝");
         int gold = 0;
@@ -22,19 +22,19 @@ public class WinnerRewards {
         switch (enemy.getName().toUpperCase()) {
             case "GOBLIN":
                 gold = 25;
-                xp = 20;
+                xp = 50;
                 potionReward = 1;
                 break;
 
             case "SKELETON":
                 gold = 50;
-                xp = 40;
+                xp = 70;
                 potionReward = 2;
                 break;
 
             case "DRAGON":
                 gold = 250;
-                xp = 200;
+                xp = 100;
                 potionReward = 3;
                 break;
             default:

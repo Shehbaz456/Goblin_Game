@@ -1,13 +1,13 @@
-package Template.Player;
+package Player;
 
 import GameHelper.GameException.*;
 
-// 1. Added 'final' keyword here to explicitly prevent polymorphism / inheritance
 public final class Player {
     private final String name;
     private int health = 100;
-    private final int maxHealth = 400;
-    private int attack = 15;
+    private final int XPthreshold = 500;
+    private static final int MAX_HEALTH = 400;
+    private int attack = 30;
     private int defense = 5;
     private int level = 1;
     private int magicPotion = 1;
@@ -36,7 +36,7 @@ public final class Player {
     }
 
     public int getMaxHealth() {
-        return maxHealth;
+        return MAX_HEALTH;
     }
 
     public int getAttack() {
@@ -87,13 +87,13 @@ public final class Player {
         if (xp < 0) {
             throw new IllegalArgumentException("XP cannot be negative.");
         }
-        this.experience += xp;
-        if (experience > requiredXptoLevelup()) {
+        experience += xp;
+        while (experience >= requiredXPtoLevelup()) {
             levelUp();
         }
     }
 
-    public int requiredXptoLevelup() {
+    private int requiredXPtoLevelup() {
         return getLevel() * 100;
     }
 
@@ -124,8 +124,8 @@ public final class Player {
         if (health < 0) {
             health = 0;
         }
-        if (this.maxHealth < health) {
-            health = this.maxHealth;
+        if (this.MAX_HEALTH < health) {
+            health = this.MAX_HEALTH;
             System.out.println("❤️ Your health is already full.");
         }
         return health;
@@ -170,11 +170,10 @@ public final class Player {
 
     public void increaseDefense(int defense) {
         if (defense < 0) {
-            System.out.println("Defense can not be Negative.");
             throw new IllegalArgumentException("Defense can not be Negative.");
         }
-        if (defense > maxHealth) {
-            System.out.println("Defence - Defense can not exceed maxHealth.");
+        if (defense > MAX_HEALTH) {
+            throw new IllegalArgumentException("Defense can not exceed maxHealth.");
         }
         this.defense += defense;
     }
@@ -182,7 +181,6 @@ public final class Player {
     public void levelUp() {
         level++;
         increaseAttack(5);
-        increaseDefense(2);
         increaseDefense(2);
         heal(20);
         System.out.println();
@@ -206,7 +204,7 @@ public final class Player {
         System.out.println("⚔️  Attack     : " + this.attack);
         System.out.println("🛡️  Defense    : " + this.defense);
         System.out.println("🧪 MagicPotion : " + this.magicPotion);
-        System.out.println("⭐ Experience  : " + this.experience);
+        System.out.println("🔬 Experience  : " + this.experience);
         System.out.println("⭐ Level       : " + this.level);
         System.out.println("💰 Gold        : " + this.gold);
         System.out.println("----------------------------------");
@@ -216,7 +214,7 @@ public final class Player {
     public void printDetailedCharacter() {
         System.out.println("\n----------- CHARACTER -----------");
         System.out.println("Name            : " + this.name);
-        System.out.println("HP              : " + this.health + "/" + this.maxHealth);
+        System.out.println("HP              : " + this.health + "/" + this.MAX_HEALTH);
         System.out.println("Attack          : " + this.attack);
         System.out.println("Defense         : " + this.defense);
         System.out.println("Level           : " + this.level);

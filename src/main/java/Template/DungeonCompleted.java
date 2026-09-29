@@ -1,4 +1,4 @@
-package Combat;
+package Template;
 
 import Player.Player;
 
@@ -11,6 +11,7 @@ public class DungeonCompleted {
         System.out.println();
         System.out.println("Warrior: " + player.getName());
         System.out.println("Level: " + player.getLevel());
+        System.out.println("Experience: " + player.getExperience());
         System.out.println("Enemies defeated: " + player.getEnemiesDefeated());
         System.out.println("Gold collected: " + player.getGoldCollected());
         System.out.println("Potions used: " + player.getPotionsUsed());

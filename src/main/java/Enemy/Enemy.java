@@ -17,6 +17,9 @@ public abstract class Enemy {
     }
 
     public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative.");
+        }
         hp -= damage;
         if (hp < 0) {
             hp = 0;
